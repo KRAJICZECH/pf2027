@@ -164,11 +164,11 @@ button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 .wordmark {
   font-weight: 800; letter-spacing: .01em; color: var(--ink);
   display: inline-flex; align-items: center; gap: 1px; line-height: 1;
-  font-size: max(12px, calc(var(--u) * 13));
+  font-size: max(17px, calc(var(--u) * 19));
 }
 .wordmark .e { display: inline-grid; gap: .11em; width: .62em; margin: 0 .05em; }
 .wordmark .e i { display: block; height: .16em; background: var(--orange); }
-.cover .wordmark { margin-bottom: calc(var(--u) * 4); }
+.cover .wordmark { margin-bottom: 0; }
 @media (min-width: 760px) {
   .cover .wordmark { position: absolute; top: calc(var(--u) * 18); left: 50%; translate: -50% 0; margin: 0; }
 }
@@ -215,7 +215,11 @@ button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 .deco { background: linear-gradient(to left, var(--paper-shade), transparent 16%), var(--paper); }
 .deco .pf {
   position: absolute; left: calc(var(--u) * 22); bottom: calc(var(--u) * 18);
-  font-family: var(--display); font-weight: 800; font-size: calc(var(--u) * 34); line-height: .9; color: var(--ink);
+  font-family: var(--display); font-weight: 800; font-size: calc(var(--u) * 22.5); line-height: 1; color: var(--ink);
+  white-space: nowrap;
+}
+@media (min-width: 760px) {
+  .deco .pf { font-size: calc(var(--u) * 42); }
 }
 .deco .pf em { color: var(--orange); font-style: normal; }
 .fl { position: absolute; display: block; }
@@ -225,10 +229,10 @@ button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
   background: linear-gradient(to right, var(--paper-shade), transparent 14%), var(--paper);
   display: grid; align-content: center; gap: calc(var(--u) * 9);
   padding: calc(var(--u) * 26) calc(var(--u) * 30);
-  font-size: max(12px, calc(var(--u) * 11)); line-height: 1.5; color: var(--ink-soft);
+  font-size: max(12px, calc(var(--u) * 11)); line-height: 1.5; color: var(--ink);
   text-align: center;
 }
-.letter p { margin: 0; text-wrap: pretty; }
+.letter p { margin: 0; text-wrap: pretty; font-weight: 400; }
 .letter .hello { color: var(--ink); font-weight: 600; }
 .letter .sign { color: var(--ink); }
 .letter .sign b { display: block; font-weight: 600; }
