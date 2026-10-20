@@ -286,6 +286,63 @@ button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
   #letter .fl-corner { display: none; }
 }
 
+/* Very low window on its side (e.g. a folded phone like Galaxy Z Flip, ~1000×330):
+   the controls row below the card used to eat ~100px of height on its own. Here the
+   arrows move beside the card instead, the hint is hidden (visually only), the letter
+   gets tighter still, and a scroll fallback guarantees the greeting is never clipped. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .stage { padding-block: 8px; }
+
+  /* Height reserve = just .stage's own padding (8px top + 8px bottom) plus a little slack.
+     Width reserve = both arrow buttons (2 × 38px) plus their edge/card clearance (2 × 16px).
+     Nested so the two-page spread (state 1 = 2 × --pw) keeps reserving width for the pair,
+     not just one page. */
+  :root {
+    --pw: min(400px, calc(100vw - 108px), calc((var(--vh) - 24px) * .78));
+  }
+  @media (min-width: 760px) {
+    :root {
+      --pw: min(440px, calc((100vw - 108px) / 2), calc((var(--vh) - 24px) * 1.45));
+    }
+  }
+
+  /* Arrows beside the card, vertically centred on it; the row itself lets clicks on the
+     card through (only the round buttons catch them), so it can span the full width. */
+  .controls {
+    position: absolute; inset: 0; z-index: 5;
+    padding: 0 8px; justify-content: space-between;
+    pointer-events: none;
+  }
+  .controls .nav { pointer-events: auto; }
+  .controls.hide .nav { pointer-events: none; }
+
+  /* Hidden visually only – stays in the accessibility tree and in tab order. */
+  .hint {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; margin: 0; padding: 0; min-width: 0;
+  }
+
+  /* Tighter letter: a text about a third longer must still fit without being cut off. */
+  .letter {
+    gap: calc(var(--u) * 4);
+    padding: calc(var(--u) * 10) calc(var(--u) * 18);
+    font-size: max(12px, calc(var(--u) * 9));
+    line-height: 1.3;
+  }
+  #letter .fl { display: none; }
+
+  /* Pojistka: když text ani tak nevejde, strana jde posunout prstem (ne otočit kartu) a
+     oslovení zůstane nahoře, ne uprostřed přetékajícího obsahu.
+     `safe center` centruje, pokud se text vejde, a jen pak spadne na "start"; prohlížeče
+     bez podpory "safe" ignorují druhé pravidlo a zůstanou na prostém "start" z prvního. */
+  #letter {
+    overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    touch-action: pan-y;
+    align-content: start;
+    align-content: safe center;
+  }
+}
+
 /* Back cover */
 .backcover { display: grid; place-content: center; justify-items: center; gap: calc(var(--u) * 12); text-align: center; }
 .backcover .wordmark { font-size: calc(var(--u) * 24); }
