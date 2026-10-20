@@ -201,15 +201,18 @@ button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 
 .mark { position: relative; width: calc(var(--u) * 140); height: calc(var(--u) * 138); flex: none; }
 .bar {
-  position: absolute; left: 50%; height: calc(var(--u) * 17); background: var(--orange); translate: -50% 0;
-  transition: width .9s cubic-bezier(.65,0,.25,1), top .9s cubic-bezier(.65,0,.25,1);
+  position: absolute; left: 50%; width: calc(var(--u) * 86); height: calc(var(--u) * 17); background: var(--orange);
+  translate: -50% 0; transform: translateY(0) scaleX(1); transform-origin: center;
+  transition: transform .9s cubic-bezier(.65,0,.25,1);
+  will-change: transform;
 }
-.bar.b1 { top: calc(var(--u) * 38); width: calc(var(--u) * 86); }
-.bar.b2 { top: calc(var(--u) * 64); width: calc(var(--u) * 86); }
-.bar.b3 { top: calc(var(--u) * 90); width: calc(var(--u) * 86); }
-.tree .bar.b1 { top: calc(var(--u) * 34); width: calc(var(--u) * 46);  transition-delay: .3s; }
-.tree .bar.b2 { top: calc(var(--u) * 61); width: calc(var(--u) * 90);  transition-delay: .15s; }
-.tree .bar.b3 { top: calc(var(--u) * 88); width: calc(var(--u) * 134); }
+.bar.b1 { top: calc(var(--u) * 38); }
+.bar.b2 { top: calc(var(--u) * 64); }
+.bar.b3 { top: calc(var(--u) * 90); }
+/* strom: posun nejdřív (translateY o rozdíl top), pak scaleX o poměr šířek – pořadí je důležité, aby se posun neškáloval */
+.tree .bar.b1 { transform: translateY(calc(var(--u) * -4)) scaleX(0.534884); transition-delay: .3s; }
+.tree .bar.b2 { transform: translateY(calc(var(--u) * -3)) scaleX(1.046512); transition-delay: .15s; }
+.tree .bar.b3 { transform: translateY(calc(var(--u) * -2)) scaleX(1.55814); }
 .trunk {
   position: absolute; left: 50%; translate: -50% 0; top: calc(var(--u) * 108);
   width: calc(var(--u) * 14); height: 0; background: var(--ink); transition: height .5s ease-out;
