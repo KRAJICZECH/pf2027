@@ -105,11 +105,6 @@ button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
   background: repeating-linear-gradient(135deg, var(--ink) 0 10px, #202227 10px 12px);
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
-.flap-in::after {
-  content: ""; position: absolute; left: 50%; top: 58%; width: 26%; height: 4%;
-  translate: -50% 0; background: var(--orange);
-  box-shadow: 0 calc(var(--eh) * .045) 0 var(--orange), 0 calc(var(--eh) * .09) 0 var(--orange);
-}
 .flap-open .env-flap { transform: perspective(1400px) rotateX(180deg); z-index: 0; }
 .env-away .env { translate: 0 60%; opacity: 0; }
 
