@@ -62,7 +62,8 @@
 @media (min-width: 760px) {
   :root {
     --ar: 1.45;
-    --pw: min(440px, calc((100vw - 80px) / 2), calc((var(--vh) - 100px) * 1.45));
+    /* 440px up to notebooks (~1440px wide), grows on larger monitors, caps at 760px (~2560px wide) */
+    --pw: min(clamp(440px, calc(36vw - 120px), 760px), calc((100vw - 80px) / 2), calc((var(--vh) - 100px) * 1.45));
   }
 }
 * { box-sizing: border-box; }
@@ -368,6 +369,13 @@ button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 .nav:disabled { opacity: .25; cursor: default; }
 .nav svg { width: 16px; height: 16px; }
 .hint { font-size: .75rem; letter-spacing: .02em; color: var(--muted); min-width: 16ch; text-align: center; }
+
+/* Large monitors: the card grows (see --pw above), so scale the controls to match */
+@media (min-width: 1600px) {
+  .nav { width: 46px; height: 46px; }
+  .nav svg { width: 19px; height: 19px; }
+  .hint { font-size: .85rem; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .leaf, .book, .lift, .env, .bar, .trunk, .star, #leaf1 .face { transition-duration: .01s !important; transition-delay: 0s !important; }

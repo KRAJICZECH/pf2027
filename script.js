@@ -25,6 +25,7 @@
   var hint = document.getElementById("hint");
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var state = 0, busy = true, timers = [];
+  var autoOpenTimer = null; // pending auto-open timeout/listener, kept separate from `timers` so it can be cancelled on its own
 
   // Snowflakes on the inside pages: [x %, y %, size, orange?, rotation, extra class (optional)]
   //   x, y     – centre of the flake in % of the page width / height
@@ -82,13 +83,36 @@
 
   function later(fn, ms) { timers.push(setTimeout(fn, reduce ? 0 : ms)); }
 
+  // Auto-open: once the tree + star animation has finished, wait a real 2s and open the
+  // card as if the visitor had clicked it. Cancelled the moment the visitor turns it themselves.
+  function cancelAutoOpen() {
+    if (autoOpenTimer) { clearTimeout(autoOpenTimer); autoOpenTimer = null; }
+    document.removeEventListener("visibilitychange", onTabVisible);
+  }
+  function onTabVisible() {
+    if (document.hidden) return;
+    document.removeEventListener("visibilitychange", onTabVisible);
+    autoOpenTimer = setTimeout(autoOpen, 2000);
+  }
+  function armAutoOpen() {
+    if (document.hidden) document.addEventListener("visibilitychange", onTabVisible);
+    else autoOpenTimer = setTimeout(autoOpen, 2000);
+  }
+  function autoOpen() {
+    autoOpenTimer = null;
+    if (state === 0 && !busy) next();
+  }
+
   function runIntro() {
+    cancelAutoOpen();
     busy = true;
     controls.classList.add("hide");
     later(function () { scene.classList.add("flap-open"); }, 700);
     later(function () { scene.classList.add("card-out"); }, 1400);
     later(function () { scene.classList.add("env-away"); }, 2300);
     later(function () { cover.classList.add("tree"); controls.classList.remove("hide"); busy = false; snow.boost(); }, 3300);
+    // tree bars/trunk/star finish transitioning 1.7s after "tree" is added (star: 1.1s delay + .6s transition, the longest) -> 5000ms total, 0ms under reduced motion
+    later(function () { armAutoOpen(); }, 3300 + 1700);
   }
 
   function restart() {
@@ -109,11 +133,11 @@
   function lock() { busy = true; later(function () { busy = false; }, 1000); }
   function next() {
     if (busy) return;
-    if (state < 2) { setState(state + 1); lock(); } else restart();
+    if (state < 2) { cancelAutoOpen(); setState(state + 1); lock(); } else restart();
   }
   function prev() {
     if (busy || state === 0) return;
-    setState(state - 1); lock();
+    cancelAutoOpen(); setState(state - 1); lock();
   }
 
   book.addEventListener("click", next);
